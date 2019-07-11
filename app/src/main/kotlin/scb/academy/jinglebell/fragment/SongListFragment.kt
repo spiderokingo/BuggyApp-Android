@@ -14,7 +14,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import scb.academy.jinglebell.R
+import scb.academy.jinglebell.activity.SongInfoActivity
 import scb.academy.jinglebell.adapter.SongAdapter
+import scb.academy.jinglebell.service.ApiManager
+import scb.academy.jinglebell.vo.Song
 import scb.academy.jinglebell.vo.SongSearchResult
 
 class SongListFragment : Fragment() {
@@ -26,6 +29,10 @@ class SongListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_song_list, container, false)
     }
 
+    private val songClick: (Song) -> Unit = {
+        SongInfoActivity.startActivity(context!!, it)
+    }
+
     private val songListCallback = object : Callback<SongSearchResult> {
         override fun onFailure(call: Call<SongSearchResult>, t: Throwable) {
             Log.e("networking", "Can not call song list", t)
@@ -33,6 +40,7 @@ class SongListFragment : Fragment() {
 
         override fun onResponse(call: Call<SongSearchResult>, response: Response<SongSearchResult>) {
             Log.i("networking", "${response.body()}")
+            songAdapter.submitList(response.body()?.results ?: listOf())
         }
     }
 
@@ -40,7 +48,7 @@ class SongListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rvSongs = view.findViewById(R.id.rv_rooms)
         rvSongs.apply {
-            adapter = SongAdapter()
+            adapter = SongAdapter(onClick = songClick)
                 .also { songAdapter = it }
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
@@ -51,6 +59,6 @@ class SongListFragment : Fragment() {
     }
 
     private fun loadSongs()  {
-
+        ApiManager.artistService.songs().enqueue(songListCallback)
     }
 }
