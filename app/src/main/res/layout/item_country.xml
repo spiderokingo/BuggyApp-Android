@@ -23,10 +23,11 @@
     <TextView
         android:id="@+id/tv_country_name"
         style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iv_country_flag"
         app:layout_constraintTop_toTopOf="@id/iv_country_flag"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/lorem" />
 
 
