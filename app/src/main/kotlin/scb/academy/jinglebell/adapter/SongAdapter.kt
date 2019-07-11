@@ -15,7 +15,7 @@ class SongAdapter(
     private val onClick: (Song) -> Unit = {}
 ) : RecyclerView.Adapter<SongItemViewHolder>() {
 
-    val songs: List<Song>
+    private val songs: List<Song>
         get() = _songs
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SongItemViewHolder(parent)
@@ -25,11 +25,7 @@ class SongAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (songs.count() == 0) {
-            0
-        } else {
-            songs.count() + 1
-        }
+        return songs.count()
     }
 
     fun submitList(list: List<Song>) {
